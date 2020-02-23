@@ -1,0 +1,86 @@
+header {
+    text-align: center;
+}
+
+.main-wrapper {
+    margin: 0 auto;
+    width: 1000px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.field-name {
+    text-align: center;
+    font-size: 20px;
+}
+
+div#player-field, div#ai-field{
+    margin: 0 auto;
+    width: 300px;
+    display: grid;
+    grid-template-columns: repeat(10, minmax(20px, 30px));
+    grid-gap: 0px;
+}
+
+div#player-field div, div#ai-field div {
+    height: 30px;
+    border: 1px solid black;
+}
+
+div.miss {
+    background-color: blue;
+}
+
+div.hit {
+    background-color: red;
+}
+
+div.empty {
+    background-color: aqua;
+}
+
+div.ship {
+    background-color: green;
+}
+
+.start-button {
+    text-align: center;
+}
+
+#ships-frame {
+    width: fit-content;
+}
+
+.temp-ship {
+    position: absolute;
+    display: flex;
+    margin: 10px;
+    flex-direction: row;
+    width: fit-content;
+}
+
+.temp-ship div {
+    width: 30px;
+    height: 30px;
+    background-color: rgba(151, 59, 236, 0);
+    box-shadow: -30px -30px blue;
+}
+
+#temp-div {
+    position: relative;
+}
+
+#destroyer, #light-cruiser, #heavy-cruiser, #battleship {
+    display: flex;
+    margin: 10px;
+    flex-direction: row;
+    width: fit-content;
+}
+
+#destroyer div, #light-cruiser div, #heavy-cruiser div, #battleship div {
+    width: 30px;
+    height: 30px;
+    background-color: blueviolet;
+    border: 1px solid black;
+}

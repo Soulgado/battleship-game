@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <script src='main.js' defer></script>
+        <link href='index.css' rel='stylesheet' type='text/css'> 
+        <title>BattleShip Game</title>
+    </head>
+    <body>
+        <header>
+            <h1>BattleShip Game</h1>
+        </header>
+        <main class='main-wrapper'>
+            <div>
+                <p class='field-name'>Opponent field</p>
+                <div id='ai-field'>
+
+                </div>
+            </div>
+            <div>
+                <p class='field-name'>Player field</p>
+                <div id='player-field'>
+
+                </div>
+            </div>
+            <div id='ships-menu'>
+                <p>Choose ships to place on the battlefield</p>
+            <div id='ships-frame'>
+                <div id='destroyer' data-size=1>
+                    <div></div>
+                </div>
+                <div id='light-cruiser' data-size=2>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div id='heavy-cruiser' data-size=3>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div id='battleship' data-size=4>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </main>
+        <div class='start-button'>
+            <button type='button' id='start-game'>Start Game!</button>
+        </div>   
+    </div>
+    <div id='shadow-destroyer' data-size=1>
+        <div></div>
+    </div>
+    <div id='shadow-light-cruiser' data-size=2>
+        <div></div>
+        <div></div>
+    </div>
+    <div id='shadow-heavy-cruiser' data-size=3>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div id='shadow-battleship' data-size=4>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    </body>
+</html>
