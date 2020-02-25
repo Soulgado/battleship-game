@@ -27,6 +27,9 @@ const Ship = (length, position) => {
       get sunk() {
         return _sunk;
       },
+      get length() {
+        return _shipLength;
+      },
       hit, 
       isSunk
     }

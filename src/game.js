@@ -8,6 +8,9 @@ const tempDiv = document.querySelector('div#temp-div');
 let tempShip;
 let size;
 let isDown = false;
+let isVert = false;
+
+// create two different functions for two states: preparing for the game and game itself
 
 function startGame() {
     const newBoard = GameBoard();
@@ -20,12 +23,12 @@ function startGame() {
     newBoard.createShip([25,35]);
     newBoard.createShip([86]);
     newBoard.createShip([23,33,43]);
-    */
 
     playerBoard.createShip([15,25,35,45]);
     playerBoard.createShip([67]);
     playerBoard.createShip([8,9]);
     playerBoard.createShip([95,96,97]);
+    */
 
     renderPlayerField(playerBoard, playerField);
     renderAIField(newBoard, player1, playerBoard, aiField); 
@@ -34,8 +37,7 @@ function startGame() {
         isDown = true;
         tempShip = document.querySelector(`#shadow-${e.target.parentNode.id}`);
         tempShip.classList.add('temp-ship');
-        size = e.target.parentNode.dataset.size;
-        console.log(size);
+        size = parseInt(e.target.parentNode.dataset.size);
     });
     
     document.body.addEventListener('mouseup', (e) => {
@@ -46,13 +48,35 @@ function startGame() {
 
     playerField.addEventListener('mouseup', (e) => {
         if (!isDown) return;
+        let notAllowed = false;
         const id = parseInt(e.target.id);
         let position = [];
+        if (id % 10 > 6 && (id + size - 1) % 10 < 3 && size > 1) return;  // should be in gameboard.js 
         for (let i = 0; i < size; i++) {
-            position.push(id+i);  // rerender unavailable cells
+            if (isVert) {
+                position.push(id+i*10)
+            } else {
+                position.push(id+i); 
+            }
         }
-        playerBoard.createShip(position);   // change neighbours so they are unavailable  
+        position.forEach(pos => {
+            if (playerBoard.gameBoard[pos] === 'S' || playerBoard.gameBoard[pos] === 'U') notAllowed = true;
+        });
+        if (notAllowed) return;
+        playerBoard.createShip(position);  
         changePlayerRender(playerBoard);  
+    });
+
+    document.body.addEventListener('keypress', (e) => {
+        if (!isDown) return;
+        if (e.keyCode === 32) {
+            if (isVert) {
+                tempShip.style.flexDirection = 'row';
+            } else {
+                tempShip.style.flexDirection = 'column';
+            }
+            isVert = !isVert;
+        }
     });
 
     // add to field big ships
@@ -152,6 +176,8 @@ function changePlayerRender(gameBoard) {
             cell.className = 'ship';
         } else if  (cellType === 'E') {
             cell.className = 'empty';
+        } else if (cellType === 'U') {
+            cell.className = 'unavailable';
         }
     });
 }

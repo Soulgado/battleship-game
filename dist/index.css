@@ -58,6 +58,7 @@ div.ship {
     margin: 10px;
     flex-direction: row;
     width: fit-content;
+    height: fit-content;
 }
 
 .temp-ship div {

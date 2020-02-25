@@ -2,17 +2,37 @@
 const Ship = require('./ship');
 
 const Gameboard = () => {
+    const _limits = [4, 3, 2, 1];
     let _currentShips = [];
     let gameBoard = new Array(100).fill('E');
 
     function createShip(position) {
+        if (checkShipsNumber(position.length)) return;
         const newShip = Ship(position.length, position);
         position.forEach((pos) => {
             gameBoard[pos] = 'S';
         });
-        _currentShips.push(newShip);   // not allow ship to create if already max number by type
+        position.forEach(position => {     // change neighbours so they are unavailable 
+            getNeighbours(position).forEach(pos => {
+                if (gameBoard[pos] !== 'S') {
+                    gameBoard[pos] = 'U';
+                }
+            });
+        });
+        _currentShips.push(newShip);   
         return newShip;
     };
+
+    function checkShipsNumber(shipLength) {
+        // not allow ship to create if already max number by type
+        let counter = 0;
+        _currentShips.forEach(ship => {
+            if (ship.length === shipLength) {
+                counter = counter + 1;
+            }
+        });
+        return counter === _limits[shipLength-1];
+    }
 
     function createAiShips() {
         // main method for auto creating AI ships
@@ -176,7 +196,8 @@ const Gameboard = () => {
         shipsDestroyed,
         gameBoard,
         turnAI,
-        createAiShips
+        createAiShips,
+        getNeighbours
     }
 };
 
