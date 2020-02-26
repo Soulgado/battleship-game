@@ -197,7 +197,10 @@ const Gameboard = () => {
         gameBoard,
         turnAI,
         createAiShips,
-        getNeighbours
+        getNeighbours,
+        get currShips() {
+            return _currentShips;
+        }
     }
 };
 

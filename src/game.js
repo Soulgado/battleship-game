@@ -5,10 +5,14 @@ const playerField = document.querySelector('#player-field');
 const aiField = document.querySelector('#ai-field');
 const playerShips = document.querySelector('div#ships-frame');
 const tempDiv = document.querySelector('div#temp-div');
+const startButton = document.querySelector('button#start-game');
+const autoPlaceButton = document.querySelector('button#auto-place');
 let tempShip;
 let size;
 let isDown = false;
 let isVert = false;
+let hasFinished = false;
+let winner;
 
 // create two different functions for two states: preparing for the game and game itself
 
@@ -18,22 +22,37 @@ function startGame() {
     const player1 = Player(newBoard);
 
     newBoard.createAiShips();
-    /*
-    newBoard.createShip([0,1,2,3]);    // create automatic ship rendering
-    newBoard.createShip([25,35]);
-    newBoard.createShip([86]);
-    newBoard.createShip([23,33,43]);
-
-    playerBoard.createShip([15,25,35,45]);
-    playerBoard.createShip([67]);
-    playerBoard.createShip([8,9]);
-    playerBoard.createShip([95,96,97]);
-    */
 
     renderPlayerField(playerBoard, playerField);
-    renderAIField(newBoard, player1, playerBoard, aiField); 
+    renderAIField(newBoard, aiField); 
 
+    playerPrep(playerBoard);
+    autoPlaceButton.addEventListener('click', () => {
+        playerBoard.gameBoard.forEach((cell, index) => {
+            playerBoard.gameBoard[index] = 'E';
+        });
+        playerBoard.createAiShips();
+        changePlayerRender(playerBoard);
+    });
+
+    startButton.addEventListener('click', () => startSession(playerBoard, aiField, 
+        newBoard, player1));  
+}
+
+function startSession(playerBoard, aiField, newBoard, player) {
+    if (playerBoard.currShips.length < 10) return;
+    playerBoard.gameBoard.forEach((cell, index) => {
+        if (cell !== 'S') {
+            playerBoard.gameBoard[index] = 'E';
+        }
+    });
+    changePlayerRender(playerBoard);
+    beginGame(aiField, newBoard, player, playerBoard);
+}
+
+function playerPrep(playerboard) {
     playerShips.addEventListener('mousedown', (e) => {
+        e.preventDefault();
         isDown = true;
         tempShip = document.querySelector(`#shadow-${e.target.parentNode.id}`);
         tempShip.classList.add('temp-ship');
@@ -51,7 +70,8 @@ function startGame() {
         let notAllowed = false;
         const id = parseInt(e.target.id);
         let position = [];
-        if (id % 10 > 6 && (id + size - 1) % 10 < 3 && size > 1) return;  // should be in gameboard.js 
+        if (!isVert && id % 10 > 6 && (id + size - 1) % 10 < 3 && size > 1) return;  // should be in gameboard.js 
+        if (isVert && id >= 70 && (id+size*10-10) > 99 && size > 1) return;  // change
         for (let i = 0; i < size; i++) {
             if (isVert) {
                 position.push(id+i*10)
@@ -60,11 +80,11 @@ function startGame() {
             }
         }
         position.forEach(pos => {
-            if (playerBoard.gameBoard[pos] === 'S' || playerBoard.gameBoard[pos] === 'U') notAllowed = true;
+            if (playerboard.gameBoard[pos] === 'S' || playerboard.gameBoard[pos] === 'U') notAllowed = true;
         });
         if (notAllowed) return;
-        playerBoard.createShip(position);  
-        changePlayerRender(playerBoard);  
+        playerboard.createShip(position);  
+        changePlayerRender(playerboard);  
     });
 
     document.body.addEventListener('keypress', (e) => {
@@ -78,9 +98,6 @@ function startGame() {
             isVert = !isVert;
         }
     });
-
-    // add to field big ships
-    // allow only determined number of ships to create
     
     document.body.addEventListener('mouseleave', () => {
         if (!isDown) return;
@@ -90,8 +107,10 @@ function startGame() {
     
     document.body.addEventListener('mousemove', (e) => {
         if (!isDown) return;
-        tempShip.style.transform = `translate(${e.pageX}px, ${e.pageY-480}px)`;  // Y coodinate is wrong
+        tempShip.style.transform = `translate(${e.pageX}px, ${e.pageY-550}px)`;  // Y coodinate is wrong
     });
+
+    // add hovering ???
     /*
     playerField.childNodes.forEach(node => {
         node.addEventListener('mouseenter', (e) => {
@@ -115,7 +134,7 @@ function startGame() {
     */
 }
 
-function renderAIField(gameBoard, player, playerBoard, parent) {
+function renderAIField(gameBoard, parent) {
     gameBoard.gameBoard.forEach((cell, index) => {   // abstract forEach
         let renderCell = document.createElement('div');
         renderCell.id = index;
@@ -124,23 +143,38 @@ function renderAIField(gameBoard, player, playerBoard, parent) {
         } else if (cell === 'E') {
             renderCell.className = 'empty'
         }
-        renderCell.addEventListener('click', (e) => attack(e, renderCell, gameBoard, player, playerBoard, parent));
         parent.appendChild(renderCell);
     });
 }
 
+function beginGame(parent, gameBoard, player, playerBoard) {
+    let nodeList = Array.from(parent.children);
+    nodeList.forEach(node => {
+        node.addEventListener('click', (e) => {
+            attack(e, gameBoard, player, playerBoard)
+        });    
+    });
+}
+
 // change two functions below
-function attack(event, renderCell, gameBoard, player, playerBoard, parent) {
-    player.playerAttack(parseInt(event.target.id));
+function attack(event, gameBoard, player, playerBoard) {
+    const attackedCell = parseInt(event.target.id);
+    if (gameBoard.gameBoard[attackedCell] === 'M' || gameBoard.gameBoard[attackedCell] === 'H') return; // to gameboard logic
+    player.playerAttack(attackedCell);
     checkAndChange(gameBoard, aiField);   // target id as argument
-    renderCell.removeEventListener('click', (e) => attack(e, renderCell, playerBoard, player, gameBoard, parent));
     if (gameBoard.shipsDestroyed()) {
+        hasFinished = true;
+        winner = "Player";   // add logic to end the game
         console.log('You win!');
+        return;
     }
     playerBoard.turnAI();
     checkAndChange(playerBoard, playerField);   // use global for now
     if (playerBoard.shipsDestroyed()) {
+        hasFinished = true;
+        winner = 'Opponent';
         console.log('You lost!');
+        return;
     }
 };
 
@@ -197,7 +231,5 @@ function checkAndChange(gameBoard, parent) {
 
 export { startGame };
 
-// player can choose position of the ship
-// automatically mark unavailable cells after hit
-// automatically and randomly put ships on the field for AI
 // stop game after win/lose
+// disable buttons and drag and drop system after beginning of the game
