@@ -4,6 +4,7 @@
         <meta charset='utf-8'>
         <script src='main.js' defer></script>
         <link href='index.css' rel='stylesheet' type='text/css'> 
+        <link href='main.css' rel='stylesheet' type='text/css'>
         <title>BattleShip Game</title>
     </head>
     <body>
@@ -25,35 +26,39 @@
             </div>
             <div id='ships-menu'>
                 <p>Choose ships to place on the battlefield</p>
-            <div id='ships-frame'>
-                <div id='destroyer' data-size=1>
-                    <div></div>
+                <div id='ships-frame'>
+                    <div id='destroyer' data-size=1>
+                        <div></div>
+                    </div>
+                    <div id='light-cruiser' data-size=2>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div id='heavy-cruiser' data-size=3>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div id='battleship' data-size=4>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
-                <div id='light-cruiser' data-size=2>
-                    <div></div>
-                    <div></div>
-                </div>
-                <div id='heavy-cruiser' data-size=3>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-                <div id='battleship' data-size=4>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
+                <div class='auto-place-button'>
+                    <button type='button' id='auto-place'>Automatically place ships</button>
+                </div>   
             </div>
         </main>
         <div class='start-button'>
             <button type='button' id='start-game'>Start Game!</button>
         </div>
-        <div class='auto-place-button'>
-            <button type='button' id='auto-place'>Automatically place ships</button>
-        </div>   
     </div>
-    <p>Hint: Press 'Space' to change orientation of the ship</p> 
+    <p>Hints:</p>
+        <ul>
+            <li>Press 'Space' to change orientation of the ship</li>
+        </ul>
     <div id='shadow-destroyer' data-size=1>
         <div></div>
     </div>

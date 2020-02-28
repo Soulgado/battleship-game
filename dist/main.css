@@ -1,0 +1,27 @@
+div#player-field, div#ai-field {
+  margin: 0 auto;
+  width: 300px;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(20px, 30px));
+  grid-gap: 0px;
+  border: 1px solid; }
+
+button#start-game, button#auto-place {
+  background-color: limegreen;
+  color: white;
+  border-radius: 30%; }
+
+div#ai-field {
+  border-color: red; }
+
+button#start-game {
+  width: 200px;
+  height: 60px;
+  font-size: 30px; }
+
+button#start-game:active {
+  background-color: #f72269; }
+
+button#auto-place {
+  height: 30px; }
+

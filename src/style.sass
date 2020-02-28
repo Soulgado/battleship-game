@@ -1,0 +1,38 @@
+%field-render
+    margin: 0 auto
+    width: 300px
+    display: grid
+    grid-template-columns: repeat(10, minmax(20px, 30px))
+    grid-gap: 0px
+    border: 1px solid
+
+%button-template
+    background-color: limegreen
+    color: white
+    border-radius: 30%
+
+$active-button-color: rgb(247, 34, 105)
+
+div#player-field
+    @extend %field-render
+
+div#ai-field
+    @extend %field-render
+    border-color: red
+
+button#start-game
+    @extend %button-template
+    width: 200px
+    height: 60px
+    font-size: 30px
+
+button#start-game:active 
+    background-color: $active-button-color
+
+button#auto-place
+    @extend %button-template
+    height: 30px
+
+button#auto-place:active
+    background-color: $active-button-color
+

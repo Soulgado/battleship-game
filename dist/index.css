@@ -4,6 +4,7 @@ header {
 
 .main-wrapper {
     margin: 0 auto;
+    margin-bottom: 20px;
     width: 1000px;
     display: flex;
     flex-wrap: wrap;
@@ -14,7 +15,7 @@ header {
     text-align: center;
     font-size: 20px;
 }
-
+/*
 div#player-field, div#ai-field{
     margin: 0 auto;
     width: 300px;
@@ -22,6 +23,7 @@ div#player-field, div#ai-field{
     grid-template-columns: repeat(10, minmax(20px, 30px));
     grid-gap: 0px;
 }
+*/
 
 div#player-field div, div#ai-field div {
     height: 30px;

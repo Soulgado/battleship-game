@@ -4,7 +4,6 @@ const Player = require('./player');
 const playerField = document.querySelector('#player-field');
 const aiField = document.querySelector('#ai-field');
 const playerShips = document.querySelector('div#ships-frame');
-const tempDiv = document.querySelector('div#temp-div');
 const startButton = document.querySelector('button#start-game');
 const autoPlaceButton = document.querySelector('button#auto-place');
 let tempShip;
@@ -12,7 +11,7 @@ let size;
 let isDown = false;
 let isVert = false;
 let hasFinished = false;
-let winner;
+let prepStage = true;
 
 // create two different functions for two states: preparing for the game and game itself
 
@@ -28,9 +27,11 @@ function startGame() {
 
     playerPrep(playerBoard);
     autoPlaceButton.addEventListener('click', () => {
+        if (!prepStage) return;
         playerBoard.gameBoard.forEach((cell, index) => {
             playerBoard.gameBoard[index] = 'E';
         });
+        
         playerBoard.createAiShips();
         changePlayerRender(playerBoard);
     });
@@ -41,21 +42,30 @@ function startGame() {
 
 function startSession(playerBoard, aiField, newBoard, player) {
     if (playerBoard.currShips.length < 10) return;
+    prepStage = false;
     playerBoard.gameBoard.forEach((cell, index) => {
         if (cell !== 'S') {
             playerBoard.gameBoard[index] = 'E';
         }
     });
+    startButton.textContent = 'Playing';
     changePlayerRender(playerBoard);
     beginGame(aiField, newBoard, player, playerBoard);
 }
 
 function playerPrep(playerboard) {
     playerShips.addEventListener('mousedown', (e) => {
+        if (!prepStage) return;
         e.preventDefault();
         isDown = true;
         tempShip = document.querySelector(`#shadow-${e.target.parentNode.id}`);
         tempShip.classList.add('temp-ship');
+        if (isVert) {
+            tempShip.style.flexDirection = 'column';
+        } else {
+            tempShip.style.flexDirection = 'row';
+        }
+        tempShip.style.transform = `translate(${e.pageX}px, ${e.pageY-550}px)`;  // change coordinates
         size = parseInt(e.target.parentNode.dataset.size);
     });
     
@@ -138,11 +148,15 @@ function renderAIField(gameBoard, parent) {
     gameBoard.gameBoard.forEach((cell, index) => {   // abstract forEach
         let renderCell = document.createElement('div');
         renderCell.id = index;
+        renderCell.className = 'empty';
+        /* 
+        development code, position of enemy ships is shown
         if (cell === 'S') {
             renderCell.className = 'ship';
         } else if (cell === 'E') {
             renderCell.className = 'empty'
         }
+        */
         parent.appendChild(renderCell);
     });
 }
@@ -159,21 +173,19 @@ function beginGame(parent, gameBoard, player, playerBoard) {
 // change two functions below
 function attack(event, gameBoard, player, playerBoard) {
     const attackedCell = parseInt(event.target.id);
-    if (gameBoard.gameBoard[attackedCell] === 'M' || gameBoard.gameBoard[attackedCell] === 'H') return; // to gameboard logic
+    if (gameBoard.gameBoard[attackedCell] === 'M' || gameBoard.gameBoard[attackedCell] === 'H' || hasFinished) return; // to gameboard logic
     player.playerAttack(attackedCell);
     checkAndChange(gameBoard, aiField);   // target id as argument
     if (gameBoard.shipsDestroyed()) {
-        hasFinished = true;
-        winner = "Player";   // add logic to end the game
-        console.log('You win!');
+        hasFinished = true;  // add logic to end the game
+        startButton.textContent = 'You win!';  // display in another div element
         return;
     }
-    playerBoard.turnAI();
-    checkAndChange(playerBoard, playerField);   // use global for now
+    let aiHit = playerBoard.turnAI();
+    changeCellRender(playerField, aiHit, playerBoard)   // use global for now
     if (playerBoard.shipsDestroyed()) {
         hasFinished = true;
-        winner = 'Opponent';
-        console.log('You lost!');
+        startButton.textContent = 'You lost!';
         return;
     }
 };
@@ -189,16 +201,6 @@ function renderPlayerField(gameBoard, parent) {
         }
         parent.appendChild(renderCell);
     });
-}
-
-function changeCellRender(number, gameBoard, parent) {
-    const cell = parent.querySelector(`#${number}`);
-    const cellType = gameBoard[number];
-    if (cellType === 'H') {
-        cell.className = 'hit';
-    } else if (cellType === 'M') {
-        cell.className = 'miss';
-    }
 }
 
 function changePlayerRender(gameBoard) {
@@ -229,7 +231,18 @@ function checkAndChange(gameBoard, parent) {
     });
 }
 
+function changeCellRender(board, id, gameBoard) {
+    const cell = board.getElementById(id);
+    const cellType = gameBoard.gameBoard[id];
+    if (cellType === 'H') {
+        cell.className = 'hit';
+    } else if (cellType === 'M') {
+        cell.className = 'miss';
+    }
+}
+
 export { startGame };
 
+// don't change neighbouring cells after hit on player field
 // stop game after win/lose
 // disable buttons and drag and drop system after beginning of the game

@@ -163,7 +163,7 @@ const Gameboard = () => {
         }).filter(cell => cell > 0);
         const randompos = Math.floor(Math.random() * available.length);
         receiveAttack(available[randompos]);
-        return available[randompos];
+        return randompos;
     }
 
     function receiveAttack(position) {
