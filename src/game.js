@@ -6,6 +6,7 @@ const aiField = document.querySelector('#ai-field');
 const playerShips = document.querySelector('div#ships-frame');
 const startButton = document.querySelector('button#start-game');
 const autoPlaceButton = document.querySelector('button#auto-place');
+const resetFieldButton = document.querySelector('button#reset-field');
 let tempShip;
 let size;
 let isDown = false;
@@ -28,13 +29,16 @@ function startGame() {
     playerPrep(playerBoard);
     autoPlaceButton.addEventListener('click', () => {
         if (!prepStage) return;
-        playerBoard.gameBoard.forEach((cell, index) => {
-            playerBoard.gameBoard[index] = 'E';
-        });
-        
+        playerBoard.resetBoard();
         playerBoard.createAiShips();
         changePlayerRender(playerBoard);
     });
+
+    resetFieldButton.addEventListener('click', () => {
+        if (!prepStage) return;
+        playerBoard.resetBoard();
+        changePlayerRender(playerBoard);
+    })
 
     startButton.addEventListener('click', () => startSession(playerBoard, aiField, 
         newBoard, player1));  
@@ -117,7 +121,7 @@ function playerPrep(playerboard) {
     
     document.body.addEventListener('mousemove', (e) => {
         if (!isDown) return;
-        tempShip.style.transform = `translate(${e.pageX}px, ${e.pageY-550}px)`;  // Y coodinate is wrong
+        tempShip.style.transform = `translate(${e.pageX}px, ${e.pageY-600}px)`;  // Y coodinate is wrong
     });
 
     // add hovering ???
@@ -182,7 +186,7 @@ function attack(event, gameBoard, player, playerBoard) {
         return;
     }
     let aiHit = playerBoard.turnAI();
-    changeCellRender(playerField, aiHit, playerBoard)   // use global for now
+    checkAndChange(playerBoard, playerField);   // use global for now
     if (playerBoard.shipsDestroyed()) {
         hasFinished = true;
         startButton.textContent = 'You lost!';
@@ -244,5 +248,3 @@ function changeCellRender(board, id, gameBoard) {
 export { startGame };
 
 // don't change neighbouring cells after hit on player field
-// stop game after win/lose
-// disable buttons and drag and drop system after beginning of the game

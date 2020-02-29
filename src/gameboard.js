@@ -6,6 +6,11 @@ const Gameboard = () => {
     let _currentShips = [];
     let gameBoard = new Array(100).fill('E');
 
+    function resetBoard() {
+        _currentShips = [];
+        gameBoard.forEach((pos, index) => gameBoard[index] = 'E');
+    }
+
     function createShip(position) {
         if (checkShipsNumber(position.length)) return;
         const newShip = Ship(position.length, position);
@@ -191,6 +196,7 @@ const Gameboard = () => {
     }
 
     return {
+        resetBoard,
         createShip,
         receiveAttack,
         shipsDestroyed,
