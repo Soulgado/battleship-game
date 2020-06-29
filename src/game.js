@@ -235,7 +235,3 @@ function checkAndChange(gameBoard, parent) {
 }
 
 export { startGame };
-
-// don't change neighbouring cells after hit on player field
-// improve AI
-// handle error on click outside the ship
