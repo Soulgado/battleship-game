@@ -4,12 +4,15 @@ div#player-field, div#ai-field {
   display: grid;
   grid-template-columns: repeat(10, minmax(20px, 30px));
   grid-gap: 0px;
-  border: 1px solid; }
+  border: 3px solid; }
 
 button {
   background-color: limegreen;
   color: white;
   border-radius: 30%; }
+
+body {
+  font-family: Arial, sans-serif; }
 
 header {
   text-align: center; }
@@ -21,6 +24,10 @@ header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around; }
+
+@media screen and (max-width: 900px) {
+  .main-wrapper {
+    flex-direction: column; } }
 
 .field-name {
   text-align: center;
@@ -59,6 +66,9 @@ button#auto-place {
 button#reset-field {
   height: 30px; }
 
+button#restart-button {
+  height: 40px; }
+
 .start-button {
   text-align: center; }
 
@@ -79,7 +89,7 @@ button#reset-field {
     width: 30px;
     height: 30px;
     background-color: rgba(151, 59, 236, 0);
-    box-shadow: -30px -30px blue; }
+    box-shadow: -30px -30px blue, -30px -30px 0 1px black; }
 
 #destroyer, #light-cruiser, #heavy-cruiser, #battleship {
   display: flex;
@@ -91,4 +101,12 @@ button#reset-field {
     height: 30px;
     background-color: blueviolet;
     border: 1px solid black; }
+
+.hints-wrapper {
+  font-size: 18px; }
+  .hints-wrapper p {
+    font-weight: bold; }
+
+footer {
+  text-align: center; }
 
