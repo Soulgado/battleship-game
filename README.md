@@ -9,4 +9,4 @@
 1) В командной строке введите команду: ```npm run build```.
 2) Основной файл приложения: **./dist/index.html**.
 
-Live-версия: 
+Live-версия: https://soulgado.github.io/battleship-game/
