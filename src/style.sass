@@ -7,17 +7,17 @@
   border: 3px solid
 
 %button-template
-  background-color: limegreen
+  background: linear-gradient(90deg, limegreen, #32cdad)
   color: white
-  border-radius: 30%
-
-$active-button-color: rgb(247, 34, 105)
+  border: none
+  border-radius: 30px
 
 =bgd-color($property)
   background-color: $property
 
 body
   font-family: Arial, sans-serif
+  background-color: #0083ff0f
 
 header
   text-align: center
@@ -25,7 +25,7 @@ header
 .main-wrapper
   margin: 0 auto
   margin-bottom: 20px
-  width: 1000px
+  max-width: 1000px
   display: flex
   flex-wrap: wrap
   justify-content: space-around
@@ -38,7 +38,6 @@ header
   text-align: center
   font-size: 20px
 
-
 div#player-field
   @extend %field-render
 
@@ -49,25 +48,25 @@ div#ai-field
 #player-field, #ai-field
   div
     height: 30px
-    border: 1px solid black
-
-.miss
-  +bgd-color(blue)
-
-.ship
-  +bgd-color(green)
-
-.hit
-  +bgd-color(red)
-
-.empty
-  +bgd-color(aqua)
-    
+    border: 0.5px solid black
+    transition: background-color 0.5s ease-out
+  .miss
+    +bgd-color(blue)
+  .ship
+    +bgd-color(green)
+  .hit
+    +bgd-color(red)
+  .empty
+    +bgd-color(#1c9efad4)
+   
 button
   @extend %button-template
 
+button:hover
+  cursor: pointer
+
 button:active
-  background-color: $active-button-color
+  background: linear-gradient(90deg, #32cd329e, #32cdad9e)
 
 button#start-game
   width: 200px
@@ -76,6 +75,7 @@ button#start-game
 
 button#auto-place
   height: 30px
+  margin-bottom: 10px
 
 button#reset-field
   height: 30px
@@ -85,6 +85,12 @@ button#restart-button
 
 .start-button
   text-align: center
+
+.ships-menu
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
 
 #ships-frame
   width: fit-content
